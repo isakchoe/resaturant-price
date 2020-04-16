@@ -21,8 +21,70 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            // index.html 로드가 완료되면 자동으로 show_star() 함수를 호출합니다.
+            show_di();
+        });
 
-</head>
+
+        function show_di() {
+            // 1. #star_box의 내부 html 태그를 모두 삭제합니다.
+            $('#list').empty()
+
+            // 2. 서버에 1) GET 방식으로, 2) /api/list 라는 주소로 star_list를 요청합니다.
+            $.ajax({
+                    type: "GET",
+                    url: "/api/list",
+                    data: {},
+                    success: function (response) {
+                        // 3. 서버가 돌려준 star_list를 star라는 변수에 저장합니다.
+                        let dinings = response['di_list']
+
+
+                        for (let i = 0; i < dinings.length; i++) {
+
+                            let url = dinings[i]['img_url'];
+                            let price = dinings[i]['price'];
+                            let menu = dinings[i]['menu'];
+                            let name = dinings[i]['name'];
+
+
+                            let temp = '<div class="album py-5 bg-light" id="list">' +
+                                '            <div class="container">' +
+                                '                <div class="row">' +
+                                '                    <div class="col-md-4">' +
+                                '                        <div class="card mb-4 shadow-sm">' +
+                                '                            <img src=' + '"' + url + '"' + 'height="225" width="200%"/>\n' +
+                                '                            <div class="card-body">\n' +
+                                '                                <p class="card-text">' + name + ' ' + menu + ' ' + price +
+                                '                                   </p>\n' +
+                                '                                <div class="d-flex justify-content-between align-items-center">\n' +
+                                '                                    <div class="btn-group">\n' +
+                                '                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>\n' +
+                                '                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>\n' +
+                                '                                    </div>\n' +
+                                '                                    <small class="text-muted">9 mins</small>\n' +
+                                '                                </div>\n' +
+                                '                            </div>\n' +
+                                '                        </div>\n' +
+                                '                    </div>\n' +
+                                '                </div>\n' +
+                                '            </div>\n' +
+                                '        </div>'
+
+                            $('#list').append(temp);
+                        }
+
+
+                    }
+                }
+            );
+        }
+
+
+    </script>
+
 <body>
 <header>
     <div class="collapse bg-dark" id="navbarHeader">
@@ -70,285 +132,49 @@
         <div class="container">
             <h1>당신의 가격대에 맞게 회기 식당을 추천해 드립니다</h1>
             <p class="lead text-muted"> 오늘 점심 뭐 먹지? 오늘 후배 밥 사주기로 했는데 비싸지 않은게 뭐가 있을까? 오늘 선배한테 밥 얻어 먹기로 했는데
-            비싸고 맛있는게 무엇일까? 경제적인 자취 라이프를 위해 무엇을 먹어야 할까?</p>
-
-
-            <img src="data:image/jpeg;base64,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">
+                비싸고 맛있는게 무엇일까? 경제적인 자취 라이프를 위해 무엇을 먹어야 할까?</p>
+            <img src="https://www.khu.ac.kr/kor/resources/user/img/mobile/common/logo.jpg">
 
 
         </div>
     </section>
+    <label for="list">
+        <div class="album py-5 bg-light" id="list">
+            <div class="container">
 
-    <div class="album py-5 bg-light">
-        <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card mb-4 shadow-sm">
 
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                             xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false"
-                             role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c"/>
-                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                        </svg>
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                            <img src="{{ url_for('static', filename='img/steak.jpeg') }}" height="225" width="100%"/>
+                            <div class="card-body">
+                                <p class="card-text">This is a wider card with supporting text below as a natural
+                                    lead-in to
+                                    additional content. This content is a little bit longer.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    </div>
+                                    <small class="text-muted">9 mins</small>
                                 </div>
-                                <small class="text-muted">9 mins</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                             xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false"
-                             role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c"/>
-                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                        </svg>
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                </div>
-                                <small class="text-muted">9 mins</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                             xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false"
-                             role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c"/>
-                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                        </svg>
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                </div>
-                                <small class="text-muted">9 mins</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                             xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false"
-                             role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c"/>
-                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                        </svg>
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                </div>
-                                <small class="text-muted">9 mins</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                             xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false"
-                             role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c"/>
-                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                        </svg>
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                </div>
-                                <small class="text-muted">9 mins</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                             xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false"
-                             role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c"/>
-                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                        </svg>
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                </div>
-                                <small class="text-muted">9 mins</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                             xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false"
-                             role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c"/>
-                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                        </svg>
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                </div>
-                                <small class="text-muted">9 mins</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                             xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false"
-                             role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c"/>
-                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                        </svg>
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                </div>
-                                <small class="text-muted">9 mins</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                             xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false"
-                             role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c"/>
-                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                        </svg>
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                </div>
-                                <small class="text-muted">9 mins</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                             xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false"
-                             role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c"/>
-                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                        </svg>
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                </div>
-                                <small class="text-muted">9 mins</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                             xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false"
-                             role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c"/>
-                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                        </svg>
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                </div>
-                                <small class="text-muted">9 mins</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                             xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false"
-                             role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c"/>
-                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                        </svg>
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                </div>
-                                <small class="text-muted">9 mins</small>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
+    </label>
 </main>
 
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+<script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
         crossorigin="anonymous"></script>
 <script>window.jQuery || document.write('<script src="/docs/4.4/assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
 <script src="/docs/4.4/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm"
         crossorigin="anonymous"></script>
+<script src="static/js/jj.js"></script>
 </body>
 </html>
