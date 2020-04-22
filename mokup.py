@@ -9,13 +9,16 @@ db = client.dbhi
 
 
 def insert():
-    doc = {'img_url': 'd',
-           'name': '어흥',
-           'price': '900',
-           'menu': 'meat'}
+    doc = {'img_url': '',
+           'name': '',
+           'price': '',
+           'menu': ''}
 
     db.dinings.insert_one(doc)
 
 
 
-insert()
+for i in  range(1,10):
+    insert()
+
+
