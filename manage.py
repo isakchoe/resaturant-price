@@ -20,15 +20,11 @@ def di_post():
     first = int(request.form['first'])
     last = int(request.form['last'])
     result = list(db.dinings.find({'price': {'$gt': first, '$lt': last}}, {'_id': False}))
-
-    print(result)
-
     return jsonify({'result': 'success', 'result': result})
 
 
 @app.route('/api/list', methods=['GET'])
 def di_get():
-
     dinings = list(db.dinings.find({}, {'_id': False}))
     return jsonify({'result': 'success', 'di_list': dinings})
 

@@ -9,6 +9,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -30,6 +31,9 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
 
+    <script type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2c6ce92980cce87d63d1803b05125714"></script>
+
 
     <script>
         $(document).ready(function () {
@@ -40,8 +44,8 @@
                 $inputTo = $(".js-input-to"),
                 instance,
                 min = 1000,
-                max = 20000,
-                from = 0,
+                max = 15000,
+                from = 1000,
                 to = 0;
 
             console.log($range)
@@ -51,8 +55,8 @@
                 type: "double",
                 min: min,
                 max: max,
-                from: 200,
-                to: 800,
+                from: 2000,
+                to: 3000,
                 onStart: updateInputs,
                 onChange: updateInputs
             });
@@ -121,14 +125,32 @@
                                 '<div class="col-md-4">' +
                                 '    <div class="card mb-4 shadow-sm">' +
                                 '        <img src=' + '"' + url + '"' + 'height="225" width="100%"/>\n' +
-                                '        <div class="card-body">\n' +
-                                '            <h4 class="card-text">' + name + '</h4>' +
+                                '        <div class="card-body" style="text-align: center">\n' +
+                                '            <h3 class="card-text">' + name + '</h3>' +
                                 '            <div class="card-text">' + menu + '</div>' +
-                                '            <div class="card-text">' + price + '</div>' +
+                                '            <div class="card-text" style="color: crimson">' + price + '</div>' +
                                 '            <div class="d-flex justify-content-between align-items-center">\n' +
                                 '                <div class="btn-group">\n' +
-                                '                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>\n' +
-                                '                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>\n' +
+                                '                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter' + i + '">\n' +
+                                '                    View</button>\n' +
+                                '<div class="modal fade restaurant-modal" id="exampleModalCenter' + i + '" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">\n' +
+                                '  <div class="modal-dialog modal-dialog-centered" role="document">\n' +
+                                '    <div class="modal-content">\n' +
+                                '      <div class="modal-header">\n' +
+                                '        <h5 class="modal-title" id="exampleModalCenterTitle">' + name + '</h5>' +
+                                '        <button type="button" class="close" data-dismiss="modal" aria-label="Close">\n' +
+                                '          <span aria-hidden="true">&times;</span>\n' +
+                                '        </button>\n' +
+                                '      </div>\n' +
+                                '      <div class="modal-body">\n' +
+                                '        <div id="map" style="width:500px;height:400px;"></div>' +
+                                '      </div>\n' +
+                                '      <div class="modal-footer">\n' +
+                                '        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>\n' +
+                                '      </div>\n' +
+                                '    </div>\n' +
+                                '  </div>\n' +
+                                '</div>' +
                                 '                </div>\n' +
                                 '            </div>\n' +
                                 '        </div>\n' +
@@ -137,8 +159,20 @@
 
 
                             $('#list').append(temp);
-                        }
 
+                            $('.restaurant-modal').on('show.bs.modal', function (e) {
+                                var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+                                var options = { //지도를 생성할 때 필요한 기본 옵션
+                                    center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+                                    level: 3 //지도의 레벨(확대, 축소 정도)
+                                };
+
+                                var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+                                // console.log(map)
+                            });
+
+
+                        }
 
                     }
                 }
@@ -175,14 +209,32 @@
                             '<div class="col-md-4">' +
                             '    <div class="card mb-4 shadow-sm">' +
                             '        <img src=' + '"' + url + '"' + 'height="225" width="100%"/>\n' +
-                            '        <div class="card-body">\n' +
-                            '            <h4 class="card-text">' + name + '</h4>' +
+                            '        <div class="card-body" style="text-align: center">\n' +
+                            '            <h3 class="card-text">' + name + '</h3>' +
                             '            <div class="card-text">' + menu + '</div>' +
-                            '            <div class="card-text">' + price + '</div>' +
+                            '            <div class="card-text" style="color: crimson">' + price + '</div>' +
                             '            <div class="d-flex justify-content-between align-items-center">\n' +
                             '                <div class="btn-group">\n' +
-                            '                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>\n' +
-                            '                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>\n' +
+                            '                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter' + i + '">\n' +
+                            '                    View</button>\n' +
+                            '<div class="modal fade" id="exampleModalCenter' + i + '" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">\n' +
+                            '  <div class="modal-dialog modal-dialog-centered" role="document">\n' +
+                            '    <div class="modal-content">\n' +
+                            '      <div class="modal-header">\n' +
+                            '        <h5 class="modal-title" id="exampleModalCenterTitle">' + name + '</h5>' +
+                            '        <button type="button" class="close" data-dismiss="modal" aria-label="Close">\n' +
+                            '          <span aria-hidden="true">&times;</span>\n' +
+                            '        </button>\n' +
+                            '      </div>\n' +
+                            '      <div class="modal-body">\n' +
+                            '        ㅇㅇㅇㅇㅇㅇ' +
+                            '      </div>\n' +
+                            '      <div class="modal-footer">\n' +
+                            '        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>\n' +
+                            '      </div>\n' +
+                            '    </div>\n' +
+                            '  </div>\n' +
+                            '</div>' +
                             '                </div>\n' +
                             '            </div>\n' +
                             '        </div>\n' +
@@ -194,14 +246,15 @@
 
 
                     }
+                    ;
+
+                    alert('필터링 되었습니다!')
 
 
                 }
             })
 
         }
-
-
     </script>
 </head>
 <body>
@@ -211,16 +264,14 @@
             <div class="row">
                 <div class="col-sm-8 col-md-7 py-4">
                     <h4 class="text-white">About</h4>
-                    <p class="text-muted">Add some information about the album below, the author, or any other
-                        background context. Make it a few sentences long so folks can pick up some informative tidbits.
-                        Then, link them off to some social networking sites or contact information.</p>
+                    <p class="text-muted">개발자: 나다 새끼들아 </p>
                 </div>
                 <div class="col-sm-4 offset-md-1 py-4">
                     <h4 class="text-white">Contact</h4>
                     <ul class="list-unstyled">
                         <li><a href="#" class="text-white">Follow on Twitter</a></li>
                         <li><a href="#" class="text-white">Like on Facebook</a></li>
-                        <li><a href="#" class="text-white">Email me</a></li>
+                        <li><a href="#" class="text-white">Email 하지마</a></li>
                     </ul>
                 </div>
             </div>
@@ -235,7 +286,7 @@
                     <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
                     <circle cx="12" cy="13" r="4"/>
                 </svg>
-                <strong>가성비</strong>
+                <strong>야, 너두 밥 먹을 수 있어!</strong>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
                     aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
@@ -246,7 +297,6 @@
 </header>
 
 <main role="main">
-
 
     <section class="jumbotron text-center">
         <div class="container">
@@ -279,6 +329,5 @@
     </div>
 
 </main>
-
 </body>
 </html>
