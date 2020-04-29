@@ -44,7 +44,7 @@
                 $inputTo = $(".js-input-to"),
                 instance,
                 min = 1000,
-                max = 15000,
+                max = 40000,
                 from = 1000,
                 to = 0;
 
@@ -56,7 +56,7 @@
                 min: min,
                 max: max,
                 from: 2000,
-                to: 3000,
+                to: 8000,
                 onStart: updateInputs,
                 onChange: updateInputs
             });
@@ -119,6 +119,8 @@
                             let price = dinings[i]['price'];
                             let menu = dinings[i]['menu'];
                             let name = dinings[i]['name'];
+                            let la = dinings[i]['la'];
+                            let lo = dinings[i]['lo'];
 
 
                             let temp =
@@ -134,7 +136,7 @@
                                 '                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter' + i + '">\n' +
                                 '                    View</button>\n' +
                                 '<div class="modal fade restaurant-modal" id="exampleModalCenter' + i + '" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">\n' +
-                                '  <div class="modal-dialog modal-dialog-centered" role="document">\n' +
+                                '  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">\n' +
                                 '    <div class="modal-content">\n' +
                                 '      <div class="modal-header">\n' +
                                 '        <h5 class="modal-title" id="exampleModalCenterTitle">' + name + '</h5>' +
@@ -143,7 +145,7 @@
                                 '        </button>\n' +
                                 '      </div>\n' +
                                 '      <div class="modal-body">\n' +
-                                '        <div id="map" style="width:500px;height:400px;"></div>' +
+                                '        <div id="map' + i + '"style="width:100%;height:500px;"></div>\n' +
                                 '      </div>\n' +
                                 '      <div class="modal-footer">\n' +
                                 '        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>\n' +
@@ -160,19 +162,29 @@
 
                             $('#list').append(temp);
 
-                            $('.restaurant-modal').on('show.bs.modal', function (e) {
-                                var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
-                                var options = { //지도를 생성할 때 필요한 기본 옵션
-                                    center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
-                                    level: 3 //지도의 레벨(확대, 축소 정도)
-                                };
+                            $('.restaurant-modal').on('shown.bs.modal', function () {
+                                let mapContainer = document.getElementById('map' + i), // 지도를 표시할 div
+                                    mapOption = {
+                                        center: new kakao.maps.LatLng(la, lo), // 지도의 중심좌표
+                                        level: 2 // 지도의 확대 레벨
+                                    };
 
-                                var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
-                                // console.log(map)
+                                let map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+                                // 마커가 표시될 위치입니다
+                                let markerPosition = new kakao.maps.LatLng(la, lo);
+
+                                // 마커를 생성합니다
+                                let marker = new kakao.maps.Marker({
+                                    position: markerPosition
+                                });
+
+                                // 마커가 지도 위에 표시되도록 설정합니다
+                                marker.setMap(map);
+
                             });
-
-
                         }
+
 
                     }
                 }
@@ -203,6 +215,8 @@
                         let price = filterDi[i]['price'];
                         let menu = filterDi[i]['menu'];
                         let name = filterDi[i]['name'];
+                        let la = filterDi[i]['la'];
+                        let lo = filterDi[i]['lo'];
 
 
                         let temp =
@@ -217,7 +231,7 @@
                             '                <div class="btn-group">\n' +
                             '                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter' + i + '">\n' +
                             '                    View</button>\n' +
-                            '<div class="modal fade" id="exampleModalCenter' + i + '" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">\n' +
+                            '<div class="modal fade restaurant-modal" id="exampleModalCenter' + i + '" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">\n' +
                             '  <div class="modal-dialog modal-dialog-centered" role="document">\n' +
                             '    <div class="modal-content">\n' +
                             '      <div class="modal-header">\n' +
@@ -227,7 +241,7 @@
                             '        </button>\n' +
                             '      </div>\n' +
                             '      <div class="modal-body">\n' +
-                            '        ㅇㅇㅇㅇㅇㅇ' +
+                            '        <div id="map' + i + '"style="width:100%;height:350px;"></div>\n' +
                             '      </div>\n' +
                             '      <div class="modal-footer">\n' +
                             '        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>\n' +
@@ -244,16 +258,36 @@
 
                         $('#list').append(temp);
 
+                        $('.restaurant-modal').on('shown.bs.modal', function () {
+                            let mapContainer = document.getElementById('map' + i), // 지도를 표시할 div
+                                mapOption = {
+                                    center: new kakao.maps.LatLng(la, lo), // 지도의 중심좌표
+                                    level: 2 // 지도의 확대 레벨
+                                };
 
+                            let map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+                            // 마커가 표시될 위치입니다
+                            let markerPosition = new kakao.maps.LatLng(la, lo);
+
+                            // 마커를 생성합니다
+                            let marker = new kakao.maps.Marker({
+                                position: markerPosition
+                            });
+
+                            // 마커가 지도 위에 표시되도록 설정합니다
+                            marker.setMap(map);
+
+                        });
                     }
-                    ;
+
 
                     alert('필터링 되었습니다!')
 
 
                 }
-            })
 
+            })
         }
     </script>
 </head>
@@ -310,10 +344,10 @@
     </section>
 
 
-    <div class="range-slider">
+    <div class="range-slider" >
         <input type="text" class="js-range-slider" value=""/>
     </div>
-    <div class="extra-controls">
+    <div class="extra-controls" style="text-align: center">
         <input type="text" id="first" class="js-input-from" value="0"/>
         <input type="text" id="last" class="js-input-to" value="0"/>
         <button onclick="serch()">검색</button>

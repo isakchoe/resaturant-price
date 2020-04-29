@@ -14,6 +14,11 @@ def home():
     return render_template('home.html')
 
 
+@app.route('/test')
+def test():
+    return render_template('test.html')
+
+
 ## API 역할을 하는 부분
 @app.route('/api/post', methods=['POST'])
 def di_post():
